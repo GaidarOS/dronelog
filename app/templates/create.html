@@ -1,0 +1,172 @@
+{% extends "main.html" %} 
+
+{% block title %}New Entry -{% endblock %}
+
+{% block content %}
+
+<div class="container" >
+    <div class="py-5 text-center">
+        <img class="d-block mx-auto mb-4" src="{{url_for('static', filename='drone_logo.png')}}" alt="" width="72" height="72">
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <h4 class="mb-3">DroneLog Entry</h4>
+            <form class='needs-validation' method='POST' action='/log' novalidate>
+                {# Row 1 #}
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="pilotName">Pilot Name</label>
+                        <input type="text" class="custom-select w-100"  list="pilotName" required>
+                        <datalist id="pilotName" name="pilotName" onchange="" required >
+                            <option value="">Choose...</option>
+                            <option>{{ session['username'] }}</option>
+                            <option>Or another name</option>
+                        </datalist>
+                        <small id="pilotNameHelp" class="form-text text-muted">Select the pilot's name.</small>
+                        <div class="invalid-feedback">
+                            Please select a valid Name.
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3"> <!-- style="display:none; visibility:hidden;"-->
+                        <label for="pilotNumber">Pilot Licence number</label>
+                        <input type="password" class="form-control" id="pilotNumber" name="pilotNumber" placeholder="Pilot's licence number" value="" required>
+                        <small id="pilotNumberHelp" class="form-text text-muted">Here goes the pilot's licence number.</small>
+                        <div class="invalid-feedback">
+                            Valid pilot number is required.
+                        </div>
+                    </div>
+                </div>
+                {# Row 2 #}
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="drone">Drone model</label>
+                        <select class="custom-select d-block w-100" id="drone" name="drone" placeholder="Drone model" required >
+                            <option value="">Choose...</option>
+                            <option>DJI S900</option>
+                        </select>    
+                        <small id="droneHelp" class="form-text text-muted">Please select the drone model</small>
+                        <div class="invalid-feedback" style="width: 100%;">
+                            Select the right drone model.
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="registration">Drone Registration Number</label>
+                        <input type="text" class="form-control" id="registration" name="registration" placeholder="Drone Registration Number" required>
+                        <small id="registrationHelp" class="form-text text-muted">Please insert drone's registration number.</small>
+                        <div class="invalid-feedback">
+                            Insert a valid registration number.
+                        </div>
+                    </div>
+                </div>
+                {# Row 3 #}
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="date">Date</label>
+                        <input type="date" class="form-control" id="date" name="date" placeholder="Flight Date" required >
+                        <small id="dateHelp" class="form-text text-muted">Please insert the date of the flight.</small>
+                        <div class="invalid-feedback" style="width: 100%;">
+                            The flight date is required.
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="time">Time</label>
+                        <input type="text" class="form-control" pattern="^\b(0[0-9]|1[0-9]|2[0-4])\b:[0-5][0-9]" id="time" name="time" placeholder="Time of vehicle takeoff" required>
+                        <small id="timeHelp" class="form-text text-muted">Please insert the flight's start time(HH:mm).</small>
+                        <div class="invalid-feedback">
+                            Please enter a time in 24h format.
+                        </div>
+                    </div>
+                </div>
+                {# Row 4 #}
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="duration">Duration</label>
+                        <input type="text" class="form-control" id="duration" name="duration" placeholder="Flight duration" required>
+                        <small id="durationHelp" class="form-text text-muted">Please enter the flight duration (mm:ss) </small>
+                        <div class="invalid-feedback">
+                            Please enter a flight duration(in minutes).
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="location">Location</label>
+                        <input type="text" class="form-control" pattern="^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$" id="location" name="location" placeholder="Takeoff location coordinates" required>
+                        <small id="locationHelp" class="form-text text-muted">Insert the coordinates in "lat,lng" format</small>
+                        <div class="invalid-feedback">
+                            Please enter a valid GPS location.
+                        </div>
+                    </div>
+                </div>
+                {# Row 5 #}
+                <div class="row">
+                    <div class="col-md-5 mb-3">
+                        <label for="weather">Weather</label>
+                        <select class="custom-select d-block w-100" id="weather" name="weather" required>
+                            <option value="">Choose...</option>
+                            <option>Sunny</option>
+                            <option>Cloudy</option>
+                            <option>Rainy</option>
+                            <option>Fair</option>
+                            <option>Snow</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select a valid weather option.
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="altitude">Altitude</label>
+                        <input type="text" class="form-control" id="altitude" name="altitude" required>
+                        <div class="invalid-feedback">
+                            Altitude is required.
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="distance">Distance</label>
+                        <input type="text" class="form-control" id="distance" name="distance" placeholder="" required>
+                        <div class="invalid-feedback">
+                            Distance traveled is required.
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="notes">Notes</label>
+                        <textarea class="form-control" id="notes" rows="3" placeholder="Extra notes here."></textarea>
+                      </div>
+                </div>
+                <hr class="mb-4">
+                {# Buttons #}
+                <div class="row">
+                    <div class="col-md-9 col-sm-9"></div>
+                    <div class="col-md-3 col-sm-3">
+                        <button class="btn btn-success" type="submit" value=""> 
+                            <i class="fas fa-save"></i> Save
+                        </button>
+                        <a class="btn btn-danger" href="{{ url_for('index') }}">
+                            <i class="fas fa-undo-alt"></i> Cancel
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+    'use strict';
+    window.addEventListener('load', function() {
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.getElementsByClassName('needs-validation');
+      // Loop over them and prevent submission
+      var validation = Array.prototype.filter.call(forms, function(form) {
+        form.addEventListener('submit', function(event) {
+          if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    }, false);
+  })();
+</script>
+
+{% endblock %}

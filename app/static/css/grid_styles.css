@@ -1,0 +1,45 @@
+.wrapper {
+  display: grid;
+  margin: 0;
+  grid-template-columns: 1fr 3fr;
+  grid-gap: 0px;
+  height: 100%;
+}
+
+.wrapper aside {
+  background-color: rebeccapurple;
+  color: azure;
+  height: 100%;
+  padding: 0 10px;
+  display: grid;
+  
+}
+.wrapper aside a { color: paleturquoise; }
+
+.wrapper main {
+  color: #999;
+  padding: 0 10px;
+  overflow-y: auto;
+}
+.wrapper main a { color: steelblue; }
+.main-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-image: url(https://picsum.photos/g/800/600?blur);
+  background-size: cover;    
+  z-index: -10000;    
+}
+
+.wrapper main h1 {
+  color: palevioletred;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  height: 100%;
+}

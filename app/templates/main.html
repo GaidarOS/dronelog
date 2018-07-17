@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}{% endblock %} Drone Log </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" -->
+    <!-- <link href="{{url_for('static', filename='css/bootstrap.min.css')}}" id="theme_css" rel="stylesheet" crossorigin="anonymous">
+    <script src="{{url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="{{url_for('static', filename='js/bootstrap.min.js') }}"></script> -->
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+        crossorigin="anonymous"></script>
+    <!-- Bootstrap Js CDN -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <!-- Font Awesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ"
+    crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY"
+    crossorigin="anonymous"></script>
+    <link rel="shortcut icon" href="{{url_for('static', filename='favicon.png')}}">
+    <link href="{{url_for('static', filename='css/animate.css')}}" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{url_for('static', filename='css/sidebar.css')}}">
+    <!-- Custom JS -->
+    <script type=text/javascript src="{{url_for('static', filename='custom.js')}}"></script>
+    {% block head%} {% endblock %}
+    <!-- <style>
+        button.sticky {
+            position: -webkit-sticky;
+            position: sticky;
+            top: 50%;
+            width: 30px;
+        }
+    </style> -->
+</head>
+
+<body>
+    <!-- [if lt IE 10]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><!-->
+    <!--<![endif]-->
+
+    <!-- <button type="button" class="sticky" onclick="togglePageContentLightDark()">
+        <i class="mdi mdi-lightbulb-on"></i>
+    </button>
+     https://harlemsquirrel.github.io/css/javascript/2017/12/08/dark-light-mode-persistent-switcher.html
+
+    <script type=text/javascript>
+        (function () {
+            setThemeFromCookie()
+        })();
+    </script> -->
+
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <!-- <strong>BS</strong> -->
+            <a href="{{url_for('index')}}">
+                <img src="{{url_for('static', filename='drone_logo.png')}}" style="width: 100%; height: 100%">
+            </a>
+        </div>
+        <ul class="list-unstyled components">
+            <li>
+                <a href="{{url_for('index')}}">
+                    <i class="fas fa-home fa-lg"></i>
+                    Home
+                </a>
+            </li>
+            <li>
+                <a href="{{url_for('panel', user=session['username'])}}">
+                    <i class="fas fa-user fa-lg"></i><br>
+                    Panel
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-briefcase fa-lg"></i>
+                    About
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-paper-plane fa-lg"></i>
+                    Contact
+                </a>
+            </li>
+            <li>
+                <a href="{{url_for('logout')}}">
+                    <i class="fas fa-sign-out-alt fa-lg"></i>
+                    Logout
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Page Content Holder -->
+    <div id="content">
+        <div class="navbar-header">
+            <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
+                <i class="fas fa-align-left"></i>
+                <span>Toggle Sidebar</span>
+            </button>
+            <span> Welcome {{ session['username'] }}</span>
+        </div>
+        <div>
+            {% block area %}{% endblock %} {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <footer class="my-5 pt-5 footer text-muted text-center text-small">
+        <p class="mb-1">&copy; 2018-2019 DroneLog</p>
+        <ul class="list-inline">
+            <li class="list-inline-item">
+                <a href="#">Privacy</a>
+            </li>
+            <li class="list-inline-item">
+                <a href="#">Terms</a>
+            </li>
+            <li class="list-inline-item">
+                <a href="#">Support</a>
+            </li>
+        </ul>
+    </footer>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+                $('#content').toggleClass('active');
+                
+            });
+        });
+    </script>
+</body>
+
+</html>
