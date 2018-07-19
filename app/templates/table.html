@@ -1,4 +1,4 @@
-{% extends "main.html" %} 
+{% extends "main.html" %}
 {% block title %}Table -{% endblock %}
 
 {% block head %}
@@ -192,7 +192,7 @@
                                 <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">
                                     <i class="fa fa-undo-alt" aria-hidden="true"></i>Cancel
                                 </button>
-                                <button class="btn btn-success" type="submit" value=""> 
+                                <button class="btn btn-success" type="submit" value="">
                                         <i class="fas fa-save"></i> Save
                                 </button>
                             </div>
@@ -229,7 +229,11 @@
 
 <div>
     <a class="btn btn-primary" href="/create">
-        <i class="fas fa-plus-circle"></i> Add New</a>
+        <i class="fas fa-plus-circle"></i> Add New
+    </a>
+    <a class="btn btn-primary" href="/create">
+        <i class="fas fa-plus-circle"></i> Add new from file
+    </a>
 </div>
 
 <script>
@@ -250,7 +254,7 @@
             });
         }, false);
     })();
-   
+
     $('.modal-content').addClass('animated bounceInLeft');
     var hideDelay = true;
     $('[name=modal]').on('hide.bs.modal',function(e){
@@ -267,5 +271,5 @@
     return true;
     });
 </script>
-    
+
 {% endblock %}

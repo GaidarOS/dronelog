@@ -23,7 +23,7 @@ function initialize(coords, id) {
             }]
         }
         ];
-    
+
         var mapOptions = {
             center: new google.maps.LatLng(parseFloat(res[0]), parseFloat(res[1])),
             zoom: 16,
@@ -55,8 +55,9 @@ function ifElseTest() {
     };
 }
 
-var darkmode = "http://localhost:8080/static/css/bootstrap_darkly.min.css";
-var lightmode = "http://localhost:8080/static/css/bootstrap.min.css";
+// var darkmode = "http://localhost:8080/static/css/bootstrap_darkly.min.css";
+var darkmode = "https://bootswatch.com/4/darkly/bootstrap.min.css";
+var lightmode = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css";
 
 function togglePageContentLightDark() {
     var css = document.getElementById('theme_css');
@@ -74,6 +75,7 @@ function setThemeFromCookie() {
     var css = document.getElementById('theme_css');
     css.href = isDarkThemeSelected() ? darkmode : lightmode
 }
+
 function outputToConsole(input){
     console.log(input);
     console.log(typeof input);
@@ -123,3 +125,17 @@ function singleToJSON(str){
 function replaceAll(str, find, replace) {
     return str.replace(new RegExp(find, 'g'), replace);
 }
+
+// Generates an alert on flash messages
+$(document).ready(function(){
+    setThemeFromCookie();
+    
+    var alrt = $("#box-descr")
+    if ((alrt).length){
+        swal({
+            type: $(alrt).attr("class"),
+            // title: 'Hey!!!',
+            text: $(alrt).text(),
+          })
+    }
+});

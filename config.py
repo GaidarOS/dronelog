@@ -12,3 +12,6 @@ class Config(object):
     # Debugging variables
     TEMPLATES_AUTO_RELOAD = True
     DEBUG = True
+    # File Upload variables
+    UPLOAD_FOLDER = '/tmp/'
+    MAX_CONTENT_LENGTH = 32 * 1024 * 1024

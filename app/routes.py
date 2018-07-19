@@ -4,10 +4,17 @@ from functools import wraps
 from flask import Flask, render_template, redirect, request, flash, url_for, session, abort, send_file
 from app import flask_app, db
 from app.models import User, Note
+from werkzeug.utils import secure_filename
+
+
+ALLOWED_EXTENSIONS = set(['bin'])
+# ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', "md"])
+
 
 with flask_app.test_request_context():
     db.init_app(flask_app)
     db.create_all()
+
 
 def login_required(role="ANY"):
     """ Restricts access to pages only to logged in users"""
@@ -26,7 +33,7 @@ def login_required(role="ANY"):
 
 def newLogEntry(obj):
     """
-    Modifies the Note object based on the data 
+    Modifies the Note object based on the data
     contained in the request JSON
 
     return:
@@ -45,6 +52,16 @@ def newLogEntry(obj):
     obj.distance = request.form.get('distance')
     obj.notes = request.form.get('notes')
     return obj
+
+
+def allowed_file(filename):
+    """
+        Checks whether the ending of the file
+        exists in ALLOWED_EXTENSIONS
+    """
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 
 @flask_app.errorhandler(403)
@@ -80,7 +97,7 @@ def panel(user):
 @flask_app.route('/login', methods=['POST'])
 def login():
     """
-    Returns the Login page view unless the user is already logged in 
+    Returns the Login page view unless the user is already logged in
     in which case it redirects to the Index page.
     """
     if session.get('logged_in'):
@@ -109,7 +126,7 @@ def logout():
 @flask_app.route('/register', methods=['GET', 'POST'])
 def register():
     """
-    Returns the user registration page when used as a GET request 
+    Returns the user registration page when used as a GET request
     or creates and stores a new user when called as a POST
     """
     if request.method == 'GET':
@@ -136,9 +153,28 @@ def pass_reset():
 @flask_app.route('/create', methods=['GET', 'POST'])
 @login_required()
 def create():
-    """    Returns page to create new log entry    """
-    if not session.get('logged_in'):
-        return render_template('login.html')
+    """    Returns page to create new log entry"""
+    return render_template('create.html')
+
+
+@flask_app.route('/create_from_logfile', methods=['GET', 'POST'])
+@login_required()
+def create_from_file():
+    """    Returns page to create new log entry from logfiles"""
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            flash('No file part', "info")
+            return redirect(request.url)
+        file = request.files['file']
+        if file.filename == '':
+            flash('No selected file', "info")
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            flash("File Uploaded Successfully", "success")
+        else:
+            flash("Error while uploading file", "error")
     return render_template('create.html')
 
 
@@ -180,7 +216,7 @@ def result():
 @login_required()
 def new_entry():
     """
-    Returns the "main" log view page when used as a GET request 
+    Returns the "main" log view page when used as a GET request
     or creates and stores a new log entry when called as a POST
     """
     if request.method == "GET":

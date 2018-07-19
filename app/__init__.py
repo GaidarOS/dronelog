@@ -27,8 +27,3 @@ db = SQLAlchemy(flask_app)
 migrate = Migrate(flask_app, db)
 
 from app import routes, models
-
-# with flask_app.test_request_context():
-#     db.init_app(flask_app)
-#     db.create_all()
-# logging.basicConfig(filename='strava.log', level=logging.DEBUG)

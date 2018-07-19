@@ -5,13 +5,15 @@
     <meta charset="utf-8">
     <title>{% block title %}{% endblock %} Drone Log </title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" -->
-    <!-- <link href="{{url_for('static', filename='css/bootstrap.min.css')}}" id="theme_css" rel="stylesheet" crossorigin="anonymous">
-    <script src="{{url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="{{url_for('static', filename='js/bootstrap.min.js') }}"></script> -->
+    <link rel="shortcut icon" href="{{url_for('static', filename='favicon.png')}}">
+    <!--
+        <link href="{{url_for('static', filename='css/bootstrap.min.css')}}" id="theme_css" rel="stylesheet" crossorigin="anonymous">
+        <script src="{{url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+        <script src="{{url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    -->
     <!-- Bootstrap CSS CDN -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" id="theme_css">
     <!-- jQuery CDN - Slim version (=without AJAX) -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <!-- Popper.JS -->
@@ -21,24 +23,17 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
     <!-- Font Awesome JS -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ"
-    crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY"
-    crossorigin="anonymous"></script>
-    <link rel="shortcut icon" href="{{url_for('static', filename='favicon.png')}}">
+        crossorigin="anonymous"></script>
+    <!-- Sweet Alert 2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.25.6/dist/sweetalert2.all.min.js"></script>
+    <!-- Animate CSS -->
     <link href="{{url_for('static', filename='css/animate.css')}}" rel="stylesheet">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{url_for('static', filename='css/sidebar.css')}}">
     <!-- Custom JS -->
-    <script type=text/javascript src="{{url_for('static', filename='custom.js')}}"></script>
-    {% block head%} {% endblock %}
-    <!-- <style>
-        button.sticky {
-            position: -webkit-sticky;
-            position: sticky;
-            top: 50%;
-            width: 30px;
-        }
-    </style> -->
+    <script type=text/javascript src="{{url_for('static', filename='custom.js')}}"></script> {% block head%} {% endblock %}
 </head>
 
 <body>
@@ -50,8 +45,9 @@
         <i class="mdi mdi-lightbulb-on"></i>
     </button>
      https://harlemsquirrel.github.io/css/javascript/2017/12/08/dark-light-mode-persistent-switcher.html
+    -->
 
-    <script type=text/javascript>
+    <!-- <script type=text/javascript>
         (function () {
             setThemeFromCookie()
         })();
@@ -66,33 +62,40 @@
         </div>
         <ul class="list-unstyled components">
             <li>
+                <span class="switch switch-sm">
+                    <i id="theme-switch" class="fas fa-lightbulb fa-lg"></i><br>
+                    <input type="checkbox" class="switch" id="switch-sm" onclick="togglePageContentLightDark()">
+                    <label for="switch-sm"></label>
+                </span>
+            </li>
+            <li>
                 <a href="{{url_for('index')}}">
                     <i class="fas fa-home fa-lg"></i>
-                    Home
+                    <br> Home
                 </a>
             </li>
             <li>
                 <a href="{{url_for('panel', user=session['username'])}}">
-                    <i class="fas fa-user fa-lg"></i><br>
-                    Panel
+                    <i class="fas fa-user fa-lg"></i>
+                    <br> Panel
                 </a>
             </li>
             <li>
                 <a href="#">
                     <i class="fas fa-briefcase fa-lg"></i>
-                    About
+                    <br> About
                 </a>
             </li>
             <li>
                 <a href="#">
                     <i class="fas fa-paper-plane fa-lg"></i>
-                    Contact
+                    <br> Contact
                 </a>
             </li>
             <li>
                 <a href="{{url_for('logout')}}">
                     <i class="fas fa-sign-out-alt fa-lg"></i>
-                    Logout
+                    <br> Logout
                 </a>
             </li>
         </ul>
@@ -100,6 +103,13 @@
 
     <!-- Page Content Holder -->
     <div id="content">
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %}
+        <div class=message_flash>
+            {% for category, message in messages %}
+            <div id="box-descr" class='{{ category }}' style="display: none;">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %} {% endwith %}
         <div class="navbar-header">
             <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
                 <i class="fas fa-align-left"></i>
@@ -131,7 +141,7 @@
             $('#sidebarCollapse').on('click', function () {
                 $('#sidebar').toggleClass('active');
                 $('#content').toggleClass('active');
-                
+
             });
         });
     </script>

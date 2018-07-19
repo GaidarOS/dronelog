@@ -17,9 +17,9 @@
      {% extends "table.html" %}
      {% block API %}YOUR_GOOGLE_API_KEY_HERE{% endblock %}
     ```
- - `$ export FLASK_APP=dronelog.py`
+ - `$ export FLASK_APP=dronelog.py`  or add this line in .bashrc
  - `$ flask run --port [#] --host [#.#.#.#]`
- - optionally `--debug` can be added to run in a debug environment
+ - optionally `--debugger` can be added to run in a debug environment
 
 ## Features
 
