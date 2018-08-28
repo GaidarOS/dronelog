@@ -1,0 +1,137 @@
+{% extends "main.html" %} {% block title %}New Entry -{% endblock %} {% block content %}
+<style>
+    #customFile .custom-file-control:lang(en)::after {
+        content: "Select file...";
+    }
+</style>
+
+<div class="container">
+    <div class="py-5 text-center">
+        <img class="d-block mx-auto mb-4" src="{{url_for('static', filename='drone_logo.png')}}" alt="" width="72" height="72">
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <h4 class="mb-3">DroneLog Entry</h4>
+            <form class='needs-validation' method='POST' action='/log' novalidate>
+                {# Row 1 #}
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="pilotName">Pilot Name</label>
+                        <input type="text" class="custom-select w-100" list="pilotName" required>
+                        <datalist id="pilotName" name="pilotName" onchange="" required>
+                            <option value="">Choose...</option>
+                            <option value="{{ session['username'] }}" >{{ session['username'] }}</option>
+                            <option value="" >Or another name</option>
+                        </datalist>
+                        <small id="pilotNameHelp" class="form-text text-muted">Select the pilot's name.</small>
+                        <div class="invalid-feedback">
+                            Please select a valid Name.
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <!-- style="display:none; visibility:hidden;"-->
+                        <label for="pilotNumber">Pilot Licence number</label>
+                        <input type="password" class="form-control" id="pilotNumber" name="pilotNumber" placeholder="Pilot's licence number" value=""
+                            required>
+                        <small id="pilotNumberHelp" class="form-text text-muted">Here goes the pilot's licence number.</small>
+                        <div class="invalid-feedback">
+                            Valid pilot number is required.
+                        </div>
+                    </div>
+                </div>
+                {# Row 2 #}
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="drone">Drone model</label>
+                        <select class="custom-select d-block w-100" id="drone" name="drone" placeholder="Drone model" required>
+                            <option value="">Choose...</option>
+                            <option>DJI S900</option>
+                        </select>
+                        <small id="droneHelp" class="form-text text-muted">Please select the drone model</small>
+                        <div class="invalid-feedback" style="width: 100%;">
+                            Select the right drone model.
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="registration">Drone Registration Number</label>
+                        <input type="text" class="form-control" id="registration" name="registration" placeholder="Drone Registration Number" required>
+                        <small id="registrationHelp" class="form-text text-muted">Please insert drone's registration number.</small>
+                        <div class="invalid-feedback">
+                            Insert a valid registration number.
+                        </div>
+                    </div>
+                </div>
+                {# Row 5 #}
+                <div class="row">
+                    <div class="col-md-5 mb-3">
+                        <label for="weather">Weather</label>
+                        <select class="custom-select d-block w-100" id="weather" name="weather" required>
+                            <option value="">Choose...</option>
+                            <option>Sunny</option>
+                            <option>Cloudy</option>
+                            <option>Rainy</option>
+                            <option>Fair</option>
+                            <option>Snow</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select a valid weather option.
+                        </div>
+                    </div>
+                    <div class="col-md-7 mb-auto">
+                        <label for="exampleInputFile">Upload Logfile</label>
+                        <div class="custom-file" id="customFile" lang="en">
+                            <input type="file" class="custom-file-input" id="exampleInputFile" aria-describedby="fileHelp" accept=".bin, .BIN"
+                            data-validation-allowing="bin" required>
+                            <label class="custom-file-label" for="exampleInputFile">
+                                Select file...
+                            </label>
+                        </div>
+                        <div class="invalid-feedback">
+                            Please select a valid weather option.
+                        </div>
+                    </div>
+                </div>
+                <hr class="mb-4"> {# Buttons #}
+                <div class="row">
+                    <div class="col-md-9 col-sm-9"></div>
+                    <div class="col-md-3 col-sm-3">
+                        <button class="btn btn-success" type="submit" value="">
+                            <i class="fas fa-save"></i> Save
+                        </button>
+                        <a class="btn btn-danger" href="{{ url_for('index') }}">
+                            <i class="fas fa-undo-alt"></i> Cancel
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+
+    /* show file value after file select */
+    $('.custom-file-input').on('change', function () {
+        let fileName = $(this).val().split('\\').pop();
+        $(this).next('.custom-file-label').addClass("selected").html(fileName);
+    });
+</script>
+
+{% endblock %}

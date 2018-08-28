@@ -1,11 +1,12 @@
 
+import os
 from datetime import datetime
 from functools import wraps
-from flask import Flask, render_template, redirect, request, flash, url_for, session, abort, send_file
+from flask import render_template, redirect, request, flash, url_for, session, abort, send_file
 from app import flask_app, db
 from app.models import User, Note
 from werkzeug.utils import secure_filename
-
+from app.log_parser.csv_to_json import log_parse
 
 ALLOWED_EXTENSIONS = set(['bin'])
 # ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', "md"])
@@ -61,6 +62,18 @@ def allowed_file(filename):
     """
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+def name_TBD(pilot_name, flnm):
+    """
+        Parses the uploaded file and by getting the 
+    """
+    new = log_parse()
+    new.file_creation(flnm)
+    flts = new.json_parse()
+    log = new.log_generation(flts, pilot_name)
+    return log
+
 
 
 
@@ -147,7 +160,7 @@ def register():
 @flask_app.route('/pass_reset', methods=['GET', 'POST'])
 def pass_reset():
     """ To Be Implemented   """
-    return "<h1>You're all out of luck... now GTFO!!!</h1>"
+    return "<h1>This has not been implemented yet!</h1>"
 
 
 @flask_app.route('/create', methods=['GET', 'POST'])
@@ -158,7 +171,7 @@ def create():
 
 
 @flask_app.route('/create_from_logfile', methods=['GET', 'POST'])
-@login_required()
+# @login_required()
 def create_from_file():
     """    Returns page to create new log entry from logfiles"""
     if request.method == 'POST':
@@ -171,17 +184,19 @@ def create_from_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            file.save(os.path.join(flask_app.config['UPLOAD_FOLDER'], filename))
+            lg = name_TBD(request.form.get('username'), filename)
+            print(lg)
             flash("File Uploaded Successfully", "success")
         else:
             flash("Error while uploading file", "error")
-    return render_template('create.html')
+    return render_template('create_from_file.html')
 
 
 @flask_app.route('/student', methods=['GET', 'POST'])
 def student():
     """    Test method for new features    """
-    return render_template('dashboard/dash_view.html')
+    return render_template('temp.html')
 
 
 @flask_app.route('/delete/<int:rowid>', methods=['GET', 'POST'])
