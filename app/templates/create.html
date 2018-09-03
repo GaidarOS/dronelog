@@ -1,4 +1,4 @@
-{% extends "main.html" %} 
+{% extends "main.html" %}
 
 {% block title %}New Entry -{% endblock %}
 
@@ -17,11 +17,11 @@
                     <div class="col-md-6 mb-3">
                         <label for="pilotName">Pilot Name</label>
                         <input type="text" class="custom-select w-100"  list="pilotName" required>
-                        <datalist id="pilotName" name="pilotName" onchange="" required >
+                        <select id="pilotName" name="pilotName" onchange="" required >
                             <option value="">Choose...</option>
                             <option>{{ session['username'] }}</option>
                             <option>Or another name</option>
-                        </datalist>
+                        </select>
                         <small id="pilotNameHelp" class="form-text text-muted">Select the pilot's name.</small>
                         <div class="invalid-feedback">
                             Please select a valid Name.
@@ -43,7 +43,7 @@
                         <select class="custom-select d-block w-100" id="drone" name="drone" placeholder="Drone model" required >
                             <option value="">Choose...</option>
                             <option>DJI S900</option>
-                        </select>    
+                        </select>
                         <small id="droneHelp" class="form-text text-muted">Please select the drone model</small>
                         <div class="invalid-feedback" style="width: 100%;">
                             Select the right drone model.
@@ -70,7 +70,7 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="time">Time</label>
-                        <input type="text" class="form-control" pattern="^\b(0[0-9]|1[0-9]|2[0-4])\b:[0-5][0-9]" id="time" name="time" placeholder="Time of vehicle takeoff" required>
+                        <input type="text" class="form-control timepicker" pattern="^\b(0[0-9]|1[0-9]|2[0-4])\b:[0-5][0-9]" id="time" name="time" placeholder="Time of vehicle takeoff" required>
                         <small id="timeHelp" class="form-text text-muted">Please insert the flight's start time(HH:mm).</small>
                         <div class="invalid-feedback">
                             Please enter a time in 24h format.
@@ -136,7 +136,7 @@
                 <div class="row">
                     <div class="col-md-9 col-sm-9"></div>
                     <div class="col-md-3 col-sm-3">
-                        <button class="btn btn-success" type="submit" value=""> 
+                        <button class="btn btn-success" type="submit" value="">
                             <i class="fas fa-save"></i> Save
                         </button>
                         <a class="btn btn-danger" href="{{ url_for('index') }}">

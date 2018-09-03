@@ -34,6 +34,8 @@
     <link rel="stylesheet" href="{{url_for('static', filename='css/sidebar.css')}}">
     <!-- Custom JS -->
     <script type=text/javascript src="{{url_for('static', filename='custom.js')}}"></script> {% block head%} {% endblock %}
+
+    <link rel="stylesheet" href="{{url_for('static', filename='css/custom.css')}}">
 </head>
 
 <body>
@@ -119,8 +121,28 @@
         </div>
         <div>
             {% block area %}{% endblock %} {% block content %}{% endblock %}
+            <div class="fab">
+                    <span class="fab-action-button">
+                        <!-- <i class="fab-action-button__icon"></i> -->
+                        <i class="fas fa-plus fa-2x fas-action-button"></i>
+                    </span>
+                    <ul class="fab-buttons">
+                        <li class="fab-buttons__item">
+                            <a href="{{url_for('create')}}" class="fab-buttons__link" data-tooltip="New Entry">
+                                <i class="fas fa-plus fa-lg icon-material"></i>
+                            </a>
+                        </li>
+                        <li class="fab-buttons__item">
+                            <a href="{{url_for('create_from_file')}}" class="fab-buttons__link" data-tooltip="Entry from Log">
+                                <i class="fas fa-folder fa-lg icon-material"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
         </div>
+
     </div>
+
 
     <footer class="my-5 pt-5 footer text-muted text-center text-small">
         <p class="mb-1">&copy; 2018-2019 DroneLog</p>
@@ -145,6 +167,7 @@
             });
         });
     </script>
+
 </body>
 
 </html>
