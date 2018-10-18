@@ -118,7 +118,7 @@ def panel(user):
     """
     user = User.query.filter_by(username=session.get('username')).first()
     logs = Note.query.filter_by(user_id=user.id).all()
-    date_count = len([drone.date for drone in Note.query.all() if drone.pilot==session.get('username')])
+    date_count = len([drone.date for drone in Note.query.all() if drone.pilot == session.get('username')])
     drones = set([drone.droneNum for drone in Note.query.all()])
     return render_template("panel.html", user=user, logs=logs.__repr__(),
                            date=date_count, drones=drones)

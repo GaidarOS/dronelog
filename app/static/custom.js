@@ -93,7 +93,7 @@ function secondsToHms(d) {
 
 function hmsToSeconds(hms) {
     var a = hms.split(':'); // split it at the colons
-    return (+a[0]) * 60 + (+a[1]);
+    return (+a[1]) * 60 + (+a[2]);
 }
 
 function totalTime(input){
@@ -129,7 +129,7 @@ function replaceAll(str, find, replace) {
 // Generates an alert on flash messages
 $(document).ready(function(){
     setThemeFromCookie();
-    
+
     var alrt = $("#box-descr")
     if ((alrt).length){
         swal({

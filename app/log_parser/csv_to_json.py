@@ -21,8 +21,8 @@ class log_parse():
         # Init Params
         debug_out = False
         correct_errors = False
-        msg_filter = [('PARM', ['Value']), ('GPS', ['GMS', 'GWk', 'Lat', 'Lng', 'Alt']), ('CURR', ['Volt']), ('POS',    ['RelHomeAlt'])]
-        msg_filters = ["PARM_Value", "GPS_GMS", "GPS_GWk", "GPS_Lat", "GPS_Lng", "GPS_Alt", "CURR_Volt",    "POS_RelHomeAlt"]
+        msg_filter = [('PARM', ['Value']), ('GPS', ['GMS', 'GWk', 'Lat', 'Lng', 'Alt']), ('CURR', ['Volt']), ('POS', ['RelHomeAlt'])]
+        msg_filters = ["PARM_Value", "GPS_GMS", "GPS_GWk", "GPS_Lat", "GPS_Lng", "GPS_Alt", "CURR_Volt", "POS_RelHomeAlt"]
         csv_null = ""
         csv_delim = ","
         time_msg = "TIME"
@@ -144,7 +144,7 @@ class log_parse():
             tdelta = datetime.strptime(last_tmstmp, FMT) - datetime.strptime(first_tmstmp, FMT)
 
             log["date"] = first_tmstmp[:10]
-            log["time"] = first_tmstmp[11:19]
+            log["time"] = first_tmstmp[11:16]
             if len(tdelta.__str__()) == 14:
                 log["duration"] = "0{}".format(tdelta.__str__().split(".")[0])
             else:
@@ -162,31 +162,3 @@ class log_parse():
             log["notes"] = ""
             logs.append(log)
         return logs
-
-
-# logpath = "/home/gaidaros/Dropbox/Ecobotix/Flightlogs/"
-
-# last_log = []
-
-
-# new_log = log_parse()
-# for fn in os.listdir(logpath):
-#     if fn[-3:] == 'bin':
-#         print(fn.split('_')[-1][:-4])
-#         print(fn)
-#         new_log.file_creation(logpath + fn)
-#         new_log.json_parse()
-#         if fn.split('_')[-1][:-4] == 'ap':
-#             pilot = "Anders"
-#             last_log.append(new_log.log_generation(pilot))
-#         elif fn.split('_')[-1][:-4] == 'vk':
-#             pilot = "Vasilis"
-#             last_log.append(new_log.log_generation(pilot))
-#         elif fn.split('_')[-1][:-4] == 'im':
-#             pilot = "Ioannis"
-#             last_log.append(new_log.log_generation(pilot))
-
-# print(last_log)
-
-# with open('final_log.json', 'w') as jsonfile:
-#     json.dump(last_log, jsonfile)
