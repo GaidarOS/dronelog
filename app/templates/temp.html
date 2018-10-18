@@ -1,166 +1,140 @@
 {% extends "main.html" %} {% block title %}Test Upload -{% endblock %} {% block head %}
 <style>
-    * {
-        padding: 0;
-        margin: 0;
-    }
-
     body {
-        font-family: Verdana, Geneva, sans-serif;
-        background-color: #CCC;
-        font-size: 12px;
+        font-family: Arial, sans-serif;
     }
 
-    .label-container {
+    .fab {
         position: fixed;
-        bottom: 48px;
-        right: 105px;
-        display: table;
-        visibility: hidden;
+        width: 68px;
+        left: 97%;
+        bottom: 2%;
+        margin-left: -60px;
     }
 
-    .label-text {
-        color: #FFF;
-        background: rgba(51, 51, 51, 0.5);
-        display: table-cell;
-        vertical-align: middle;
-        padding: 10px;
-        border-radius: 3px;
-    }
-
-    .label-arrow {
-        display: table-cell;
-        vertical-align: middle;
-        color: #333;
-        opacity: 0.5;
-    }
-
-    .float {
-        position: fixed;
-        width: 60px;
-        height: 60px;
-        bottom: 40px;
-        right: 40px;
-        background-color: #F33;
-        color: #FFF;
-        border-radius: 50px;
-        text-align: center;
-        box-shadow: 2px 2px 3px #999;
-        z-index: 1000;
-        animation: bot-to-top 2s ease-out;
-    }
-
-    .floating {
-        position: fixed;
-        right: 40px;
-        padding-bottom: 20px;
-        bottom: 80px;
-        z-index: 100;
-    }
-
-    .floating li {
-        list-style: none;
-        margin-bottom: 10px;
-    }
-
-    .floating li a {
-        background-color: #F33;
-        color: #FFF;
-        border-radius: 50px;
-        text-align: center;
-        box-shadow: 2px 2px 3px #999;
-        width: 60px;
-        height: 60px;
-        display: block;
-    }
-
-    .floating:hover {
-        visibility: visible !important;
-        opacity: 1 !important;
-    }
-
-    .my-float {
-        font-size: 24px;
-        margin-top: 18px;
-    }
-
-    a#menu-share+ul {
-        visibility: hidden;
-    }
-
-    a#menu-share:hover+ul {
+    .fab:hover .fab-buttons {
+        opacity: 1;
         visibility: visible;
-        animation: scale-in 0.5s;
     }
 
-    a#menu-share i {
-        animation: rotate-in 0.5s;
+    .fab:hover .fab-buttons__link {
+        transform: scaleY(1) scaleX(1) translateY(-16px) translateX(0px);
     }
 
-    a#menu-share:hover>i {
-        animation: rotate-out 0.5s;
+    .fab-action-button:hover+.fab-buttons .fab-buttons__link:before {
+        visibility: visible;
+        opacity: 1;
+        transform: scale(1);
+        transform-origin: right center 0;
+        transition-delay: 0.3s;
     }
 
-    @keyframes bot-to-top {
-        0% {
-            bottom: -40px
-        }
-        50% {
-            bottom: 40px
-        }
+    .fab-action-button {
+        position: absolute;
+        bottom: 0;
+        display: block;
+        width: 68px;
+        height: 68px;
+        background-color: #007bff;
+        border-color: #007bff;
+        border-radius: 50%;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
     }
 
-    @keyframes scale-in {
-        from {
-            transform: scale(0);
-            opacity: 0;
-        }
-        to {
-            transform: scale(1);
-            opacity: 1;
-        }
+    .fab-buttons {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 68px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        opacity: 0;
+        visibility: hidden;
+        transition: 0.2s;
+    }
+    .fas-action-button{
+        margin: 19px 0 0 20px;
+        color: white;
+    }
+    .fab-buttons__item {
+        display: block;
+        text-align: center;
+        margin: 12px 0;
     }
 
-    @keyframes rotate-in {
-        from {
-            transform: rotate(0deg);
-        }
-        to {
-            transform: rotate(360deg);
-        }
+    .fab-buttons__link {
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        text-decoration: none;
+        background-color: #007bff;
+        border-radius: 50%;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+        transform: scaleY(0.5) scaleX(0.5) translateY(0px) translateX(0px);
+        -moz-transition: .3s;
+        -webkit-transition: .3s;
+        -o-transition: .3s;
+        transition: .3s;
     }
 
-    @keyframes rotate-out {
-        from {
-            transform: rotate(360deg);
-        }
-        to {
-            transform: rotate(0deg);
-        }
+    [data-tooltip]:before {
+        top: 50%;
+        margin-top: -11px;
+        font-weight: 600;
+        border-radius: 2px;
+        background: #585858;
+        color: #fff;
+        content: attr(data-tooltip);
+        font-size: 12px;
+        text-decoration: none;
+        visibility: hidden;
+        opacity: 0;
+        padding: 4px 7px;
+        margin-right: 12px;
+        position: absolute;
+        transform: scale(0);
+        right: 100%;
+        white-space: nowrap;
+        transform-origin: top right;
+        transition: all .3s cubic-bezier(.25, .8, .25, 1);
+    }
+
+    [data-tooltip]:hover:before {
+        visibility: visible;
+        opacity: 1;
+        transform: scale(1);
+        transform-origin: right center 0;
+    }
+
+    .icon-material {
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        color: white;
     }
 </style>
-{% endblock %} {% block content %}
+{% endblock %}
 
-<div class="container">
-    <a href="#" class="float" id="menu-share">
-        <i class="fas fa-share my-float"></i>
-    </a>
-    <ul class="floating">
-        <li>
-            <a href="#">
-                <i class="fas fa-facebook my-float"></i>
+{% block content %}
+
+<div class="fab">
+    <span class="fab-action-button">
+        <!-- <i class="fab-action-button__icon"></i> -->
+        <i class="fas fa-plus fa-2x fas-action-button"></i>
+    </span>
+    <ul class="fab-buttons">
+        <li class="fab-buttons__item">
+            <a href="{{url_for('create')}}" class="fab-buttons__link" data-tooltip="New Entry">
+                <i class="fas fa-plus fa-lg icon-material"></i>
             </a>
         </li>
-        <li>
-            <a href="#">
-                <i class="fas fa-google-plus my-float"></i>
-            </a>
-        </li>
-        <li>
-            <a href="#">
-                <i class="fas fa-twitter my-float"></i>
+        <li class="fab-buttons__item">
+            <a href="{{url_for('create_from_file')}}" class="fab-buttons__link" data-tooltip="Entry from Log">
+                <i class="fas fa-folder fa-lg icon-material"></i>
             </a>
         </li>
     </ul>
 </div>
+
 {% endblock %}

@@ -12,17 +12,16 @@
     <div class="row">
         <div class="col-md-12 col-sm-12">
             <h4 class="mb-3">DroneLog Entry</h4>
-            <form class='needs-validation' method='POST' action='/log' novalidate>
+            <form class='needs-validation' method='POST' action='/create_from_logfile' enctype="multipart/form-data" novalidate>
                 {# Row 1 #}
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="pilotName">Pilot Name</label>
-                        <input type="text" class="custom-select w-100" list="pilotName" required>
-                        <datalist id="pilotName" name="pilotName" onchange="" required>
+                        <select id="pilotName" class="custom-select w-100" name="pilotName" required>
                             <option value="">Choose...</option>
                             <option value="{{ session['username'] }}" >{{ session['username'] }}</option>
                             <option value="" >Or another name</option>
-                        </datalist>
+                        </select>
                         <small id="pilotNameHelp" class="form-text text-muted">Select the pilot's name.</small>
                         <div class="invalid-feedback">
                             Please select a valid Name.
@@ -80,7 +79,7 @@
                     <div class="col-md-7 mb-auto">
                         <label for="exampleInputFile">Upload Logfile</label>
                         <div class="custom-file" id="customFile" lang="en">
-                            <input type="file" class="custom-file-input" id="exampleInputFile" aria-describedby="fileHelp" accept=".bin, .BIN"
+                            <input type="file" class="custom-file-input" name="file" id="exampleInputFile" aria-describedby="fileHelp" accept=".bin, .BIN"
                             data-validation-allowing="bin" required>
                             <label class="custom-file-label" for="exampleInputFile">
                                 Select file...
@@ -89,6 +88,12 @@
                         <div class="invalid-feedback">
                             Please select a valid weather option.
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label for="notes">Notes</label>
+                        <textarea class="form-control" id="notes" rows="3" placeholder="Extra notes here."></textarea>
                     </div>
                 </div>
                 <hr class="mb-4"> {# Buttons #}

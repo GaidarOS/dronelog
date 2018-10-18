@@ -62,12 +62,9 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="pilotName">Pilot Name</label>
-                                    <input type="text" class="custom-select w-100" list="pilotName" required>
-                                    <datalist id="pilotName" name="pilotName"  value="{{ session['username']}}" onchange="" required>
-                                        <option value="">Choose...</option>
+                                    <select id="pilotName" class="custom-select w-100"  name="pilotName"  value="{{ session['username']}}" required>
                                         <option value="{{session['username']}}">{{ session['username'] }}</option>
-                                        <option>Or another name</option>
-                                    </datalist>
+                                    </select>
                                     <small id="pilotNameHelp" class="form-text text-muted">Select the pilot's name.</small>
                                     <div class="invalid-feedback">
                                         Please select a valid Name.

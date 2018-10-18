@@ -8,8 +8,13 @@ from math import pi, sqrt
 from datetime import datetime, timedelta
 from app.log_parser.sdlog2_dump import SDLog2Parser
 from app.log_parser.transverse_mercator import tranmerc
+# from sdlog2_dump import SDLog2Parser
+# from transverse_mercator import tranmerc
+
 
 class log_parse():
+    def __init__(self):
+        pass
 
     def file_creation(self, filename):
 
@@ -39,18 +44,16 @@ class log_parse():
         csvfile = open('out_to_csv.csv', 'r')
         reader = csv.DictReader(csvfile, msg_filters)
 
-
         with open('json_from_csv.json', 'w') as jsonfile:
             jsonfile.write('[')
             for row in reader:
                 json.dump(row, jsonfile)
                 jsonfile.write(',\n')
             jsonfile.write(']')
-            msg = jsonfile
         csvfile.close()
 
         with open('json_from_csv.json', 'r') as infile, \
-            open('json_clean.json', 'w') as outfile:
+                open('json_clean.json', 'w') as outfile:
             data = infile.read()
             data = data.replace(",\n]", "]")
             outfile.write(data)
@@ -81,7 +84,7 @@ class log_parse():
                         home_lat = jsn[i]["GPS_Lat"]
                         home_lng = jsn[i]["GPS_Lng"]
                         coords.append([home_lat + "," + home_lng])
-                        flights.append([first_GMS, first_GWk, last_GMS, last_GWk, home_lat, home_lng, coords, max_alt]  )
+                        flights.append([first_GMS, first_GWk, last_GMS, last_GWk, home_lat, home_lng, coords, max_alt])
                     last_GMS = jsn[i]["GPS_GMS"]
                     last_GWk = jsn[i]["GPS_GWk"]
                     coords.append([jsn[i]["GPS_Lat"] + "," + jsn[i]["GPS_Lng"]])
@@ -98,10 +101,9 @@ class log_parse():
 
     def calculate_distance(self, coords):
         # WGS-84 defines
-        wgs84_a = 6378137.0 # WGS84 semi-major axis of ellipsoid [m]
-        wgs84_f = 1/298.257223563 # WGS84 flattening of ellipsoid
-        deg2rad = pi/180.0
-        rad2deg = 180.0/pi
+        wgs84_a = 6378137.0  # WGS84 semi-major axis of ellipsoid [m]
+        wgs84_f = 1 / 298.257223563  # WGS84 flattening of ellipsoid
+        deg2rad = pi / 180.0
 
         # UTM defines
         utm_false_easting = 500000.0
@@ -114,7 +116,7 @@ class log_parse():
 
         distance = 0
 
-        tm = tranmerc(wgs84_a, wgs84_f, utm_origin_latitude, central_meridian*deg2rad, utm_false_easting,   false_northing, utm_scale_factor)
+        tm = tranmerc(wgs84_a, wgs84_f, utm_origin_latitude, central_meridian*deg2rad, utm_false_easting, false_northing, utm_scale_factor)
 
         for coord in coords:
             if coord == coords[0]:
@@ -130,7 +132,7 @@ class log_parse():
     def log_generation(self, flights, pilot):
         CET = 3600
         CEST = 2 * CET
-
+        logs = []
         for flight in flights:
             log = {}
             first_tmstmp = self.weeksecondstoutc(int(flight[1]), int(flight[0]) / 1000 + CEST, 37)
@@ -141,12 +143,14 @@ class log_parse():
 
             tdelta = datetime.strptime(last_tmstmp, FMT) - datetime.strptime(first_tmstmp, FMT)
 
-            log["date"] = first_tmstmp[:9]
+            log["date"] = first_tmstmp[:10]
             log["time"] = first_tmstmp[11:19]
             if len(tdelta.__str__()) == 14:
-                log["duration"] = "0{}".format(tdelta.__str__()[:-6])
-            elif len(tdelta.__str__()) == 14:
-                log["duration"] = "{}".format(tdelta.__str__()[:-6])
+                log["duration"] = "0{}".format(tdelta.__str__().split(".")[0])
+            else:
+                log["duration"] = "{}".format(tdelta.__str__())
+            print("Tm_Delta: ", tdelta.__str__())
+            print("Duration: ", log['duration'])
             log["regNum"] = 4775767
             log["droneNum"] = 11534
             log["pilot"] = pilot
@@ -156,5 +160,33 @@ class log_parse():
             log["weather"] = "Sunny"
             log["distance"] = "{}".format(int(self.calculate_distance(flight[-2])))
             log["notes"] = ""
+            logs.append(log)
+        return logs
 
-        return log
+
+# logpath = "/home/gaidaros/Dropbox/Ecobotix/Flightlogs/"
+
+# last_log = []
+
+
+# new_log = log_parse()
+# for fn in os.listdir(logpath):
+#     if fn[-3:] == 'bin':
+#         print(fn.split('_')[-1][:-4])
+#         print(fn)
+#         new_log.file_creation(logpath + fn)
+#         new_log.json_parse()
+#         if fn.split('_')[-1][:-4] == 'ap':
+#             pilot = "Anders"
+#             last_log.append(new_log.log_generation(pilot))
+#         elif fn.split('_')[-1][:-4] == 'vk':
+#             pilot = "Vasilis"
+#             last_log.append(new_log.log_generation(pilot))
+#         elif fn.split('_')[-1][:-4] == 'im':
+#             pilot = "Ioannis"
+#             last_log.append(new_log.log_generation(pilot))
+
+# print(last_log)
+
+# with open('final_log.json', 'w') as jsonfile:
+#     json.dump(last_log, jsonfile)

@@ -7,9 +7,9 @@ from app import flask_app, db
 from app.models import User, Note
 from werkzeug.utils import secure_filename
 from app.log_parser.csv_to_json import log_parse
+from threading import Thread
 
 ALLOWED_EXTENSIONS = set(['bin'])
-# ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', "md"])
 
 
 with flask_app.test_request_context():
@@ -32,7 +32,7 @@ def login_required(role="ANY"):
     return wrapper
 
 
-def newLogEntry(obj):
+def new_log_entry(obj):
     """
     Modifies the Note object based on the data
     contained in the request JSON
@@ -66,7 +66,7 @@ def allowed_file(filename):
 
 def name_TBD(pilot_name, flnm):
     """
-        Parses the uploaded file and by getting the 
+        Parses the uploaded file and by getting the
     """
     new = log_parse()
     new.file_creation(flnm)
@@ -75,6 +75,23 @@ def name_TBD(pilot_name, flnm):
     return log
 
 
+def new_log_entry_from_file(entry):
+    obj = Note()
+    print(entry)
+    obj.date = entry['date']
+    obj.time = entry['time']
+    obj.duration = entry['duration']
+    obj.regNum = request.form.get('registration')
+    obj.droneNum = request.form.get('drone')
+    obj.pilot = request.form.get('pilotName')
+    obj.pilotNum = request.form.get('pilotNumber')
+    obj.location = entry['location']
+    obj.altitude = entry['altitude']
+    obj.weather = request.form.get('weather')
+    obj.distance = entry['distance']
+    obj.notes = request.form.get('notes')
+    db.session.add(obj)
+    db.session.commit()
 
 
 @flask_app.errorhandler(403)
@@ -185,9 +202,11 @@ def create_from_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(flask_app.config['UPLOAD_FOLDER'], filename))
-            lg = name_TBD(request.form.get('username'), filename)
-            print(lg)
+            lg = name_TBD(request.form.get('username'), flask_app.config['UPLOAD_FOLDER'] + filename)
+            for ff in lg:
+                new_log_entry_from_file(ff)
             flash("File Uploaded Successfully", "success")
+            return redirect(url_for('index'))
         else:
             flash("Error while uploading file", "error")
     return render_template('create_from_file.html')
@@ -215,7 +234,7 @@ def edit_log(itemid):
     passed(by ID) log entry
     """
     edited = Note.query.filter_by(id=itemid).first()
-    edited = newLogEntry(edited)
+    edited = new_log_entry(edited)
     db.session.commit()
     return redirect(url_for('index'))
 
@@ -237,7 +256,7 @@ def new_entry():
     if request.method == "GET":
         return render_template("api.html")
     new_log = Note()
-    new_log = newLogEntry(new_log)
+    new_log = new_log_entry(new_log)
     new_log.user = User.query.filter_by(username=session['username']).first()
     db.session.add(new_log)
     db.session.commit()
