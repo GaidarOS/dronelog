@@ -145,12 +145,10 @@ class log_parse():
 
             log["date"] = first_tmstmp[:10]
             log["time"] = first_tmstmp[11:16]
-            if len(tdelta.__str__()) == 14:
-                log["duration"] = "0{}".format(tdelta.__str__().split(".")[0])
-            else:
-                log["duration"] = "{}".format(tdelta.__str__())
-            print("Tm_Delta: ", tdelta.__str__())
-            print("Duration: ", log['duration'])
+            drtn = tdelta.__str__().split(".")[0].split(":")
+            log["duration"] = "{}".format(drtn[1] + ":" + drtn[2])
+            # print("Tm_Delta: ", tdelta.__str__())
+            # print("Duration: ", log['duration'])
             log["regNum"] = 4775767
             log["droneNum"] = 11534
             log["pilot"] = pilot

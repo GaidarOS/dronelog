@@ -1,47 +1,53 @@
-{% extends "main.html" %} 
+{% extends "main.html" %}
 
-    {% block title %}User panel - {% endblock %}
-    {% block head%}
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='calendar-heatmap/calendar-heatmap.css')}}">
-    <script src="{{url_for('static', filename='calendar-heatmap/calendar-heatmap.js')}}"></script>
-    <!-- Chart, Moment, D3JS CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment.min.js" charset="utf-8"></script>
-    <script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
-    {% endblock %}
+{% block title %}User panel - {% endblock %}
+{% block head%}
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='calendar-heatmap/calendar-heatmap.css')}}">
+<script src="{{url_for('static', filename='calendar-heatmap/calendar-heatmap.js')}}"></script>
+<!-- Chart, Moment, D3JS CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment.min.js" charset="utf-8"></script>
+<script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+{% endblock %}
 
-    {% block content %}
-    <div>
-        <h2>User Info</h2>
-        <p>
-            And here is the amount of times you have flown in 2018-02-07: {{date}}
-            <br> And the different drones are {{drones}}
-        </p>
+{% block content %}
+<div>
+    <h2>User Info</h2>
+    <p>
+        And here is the amount of times you have flown in 2018-02-07: {{date}}
+        <br> And the different drones are {{drones}}
+    </p>
+    <p id="fltTime"> You have flown for </p>
+</div>
 
-    </div>
-    <div class="line"></div>
-    <div class="container">
-        <script type="text/javascript">
-            var now = moment().endOf('day').toDate();
-            var yearAgo = moment().startOf('day').subtract(1, 'year').toDate();
-            var data = doubleToJSON("{{logs}}")
-            console.log(data)
-            var chartData = d3.nest()
-            .key(function (d) { return d.Date; })
-            .rollup(function (v) { return v.length }
-        ).entries(data)
-        console.log(chartData)
+<div class="line"></div>
+
+<div class="container">
+    <script type="text/javascript">
+        var now = moment().endOf('day').toDate();
+        var yearAgo = moment().startOf('day').subtract(1, 'year').toDate();
+        var data = doubleToJSON("{{logs}}")
+        console.log("Data: ",data)
+        var chartData = d3.nest()
+            .key(function (d) {
+                return d.Date;
+            })
+            .rollup(function (v) {
+                return v.length
+            }).entries(data)
+        console.log("ChartData: ",chartData)
         var heatmap = calendarHeatmap()
-        .data(chartData)
-        .selector('.container')
-        .tooltipEnabled(true)
-        .colorRange(['#d9e7d8', '#208224'])
-        .onClick(function (data) {
-        });
-        heatmap();  // render the chart
-        </script>
-            </div>
-        </div>
-    </div>
+            .data(chartData)
+            .selector('.container')
+            .tooltipEnabled(true)
+            .colorRange(['#d9e7d8', '#208224'])
+            .onClick(function (data) {});
+        heatmap(); // render the chart
 
-    {% endblock %}
+        // totalTime("{{logs}}");
+        $("#fltTime").append(totalTime("{{logs}}"));
+    </script>
+</div>
+
+
+{% endblock %}

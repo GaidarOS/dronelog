@@ -76,6 +76,8 @@ def name_TBD(pilot_name, flnm):
 
 
 def new_log_entry_from_file(entry):
+    """get the data from the parsed logfile
+    and create a database entry for that user """
     obj = Note()
     print(entry)
     obj.date = entry['date']
@@ -97,8 +99,7 @@ def new_log_entry_from_file(entry):
 
 @flask_app.errorhandler(403)
 def bad_request(error):
-    """ As the name suggests, it handles 403 errors
-    and returns the 403 page"""
+    """ Handles 403 errors and returns the 403 page"""
     return render_template("errors/403.html")
 
 
@@ -119,7 +120,7 @@ def panel(user):
     """
     user = User.query.filter_by(username=session.get('username')).first()
     logs = Note.query.filter_by(user_id=user.id).all()
-    print(logs)
+    # print(logs)
     date_count = len([drone.date for drone in Note.query.all() if drone.pilot == session.get('username')])
     drones = set([drone.droneNum for drone in Note.query.all()])
     return render_template("panel.html", user=user, logs=logs.__repr__(),

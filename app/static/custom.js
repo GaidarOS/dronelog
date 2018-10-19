@@ -93,22 +93,23 @@ function secondsToHms(d) {
 
 function hmsToSeconds(hms) {
     var a = hms.split(':'); // split it at the colons
-    return (+a[1]) * 60 + (+a[2]);
+    return (+a[0]) * 60 + (+a[1]);
 }
 
 function totalTime(input){
+    // expects the raw log data from 
     var res = doubleToJSON(input);
     var ttlTime = 0
     for (var i=0; i < res.length; i++) {
-        console.log(i)
         for (const [key, value] of Object.entries(res[i])){
             if (key == "duration"){
+                // value is a string (mm:ss)
                 ttlTime += hmsToSeconds(value);
-                console.log(ttlTime)
             }
         }
     }
     console.log("The total flown time is: " + secondsToHms(ttlTime))
+    return secondsToHms(ttlTime);
 }
 
 function doubleToJSON(str){
