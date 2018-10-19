@@ -90,6 +90,7 @@ def new_log_entry_from_file(entry):
     obj.weather = request.form.get('weather')
     obj.distance = entry['distance']
     obj.notes = request.form.get('notes')
+    obj.user = User.query.filter_by(username=session['username']).first()
     db.session.add(obj)
     db.session.commit()
 
@@ -118,6 +119,7 @@ def panel(user):
     """
     user = User.query.filter_by(username=session.get('username')).first()
     logs = Note.query.filter_by(user_id=user.id).all()
+    print(logs)
     date_count = len([drone.date for drone in Note.query.all() if drone.pilot == session.get('username')])
     drones = set([drone.droneNum for drone in Note.query.all()])
     return render_template("panel.html", user=user, logs=logs.__repr__(),
